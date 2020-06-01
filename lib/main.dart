@@ -25,7 +25,7 @@ class MyApp extends StatelessWidget {
     var initialRoute = AppConfig.of(context).initialRoute;
     return MaterialApp(
       theme: ThemeData(
-        accentColor: Colors.green,
+        accentColor: Config.darkprimary,
         fontFamily: 'Robot'
       ),
       debugShowCheckedModeBanner: false,
@@ -38,7 +38,7 @@ class MyApp extends StatelessWidget {
   static void initSystemDefault() {
     SystemChrome.setSystemUIOverlayStyle(
       SystemUiOverlayStyle(
-        statusBarColor: Config.primary,
+        statusBarColor: Config.darkprimary,
       ),
     );
   }

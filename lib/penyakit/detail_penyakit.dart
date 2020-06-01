@@ -31,10 +31,10 @@ class _PageDetailPenyakitState extends State<PageDetailPenyakit> {
     print(data);
     setState(() {
       nama = data["data"][0]["nama_penyakit"];
-      ciri = """data['data'][0]['ciri_penyakit']""";
-      penanggulangan = """data["data"][0]["penanggulangan"]""";
-      pencegahan = """data["data"][0]["pencegahan"]""";
-      deskripsi = """$data['data'][0]['deskripsi']""";
+      ciri = data['data'][0]['ciri_penyakit'];
+      penanggulangan = data["data"][0]["penanggulangan"];
+      pencegahan = data["data"][0]["pencegahan"];
+      deskripsi = data['data'][0]['deskripsi'];
     });
   }
 

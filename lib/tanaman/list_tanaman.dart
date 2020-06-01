@@ -76,7 +76,9 @@ class _PageListTanamanState extends State<PageListTanaman> {
     http.Response response = await http.get(
       Config.ipWeb + 'viewPlants',
     );
+    print(response.body);
     if (response.statusCode == 200) {
+      
       var data = json.decode(response.body);
       for (int i = 0; i < data['data'].length; i++) {
         tempList.add(data['data'][i]);

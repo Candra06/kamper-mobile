@@ -1,4 +1,4 @@
-#Mon Jun 01 12:25:55 WIB 2020
+#Mon Jun 01 13:07:20 WIB 2020
 base.0=/home/prime/Documents/Project/Flutter/kamper/build/app/intermediates/dex/debug/mergeDexDebug/out/classes.dex
 path.0=classes.dex
 renamed.0=classes.dex
