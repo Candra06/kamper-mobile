@@ -9,7 +9,7 @@ class Config {
   static Color primary = HexColor("#00E98C");
   static Color darkprimary = HexColor("#00CBB6");
   static final HexColor textinput = new HexColor("#EFEFEF");
-  static final String ipServer = "http://192.168.1.4:8000/";
+  static final String ipServer = "http://kamper.evoindo.com/";
   static final String ipWeb = ipServer+"api/";
   static final String linkImage = ipServer+"storage/app/plants/";
 

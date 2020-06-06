@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:kamper/home.dart';
 import 'package:kamper/utils/config.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../routes.dart';
@@ -16,7 +17,7 @@ class _SideAkunState extends State<SideAkun> {
   logOut() async {
     SharedPreferences preferences = await SharedPreferences.getInstance();
     await preferences.setString("token", '');
-    Navigator.pushReplacementNamed(context, Routes.LOGIN);
+    Navigator.pushReplacement(context, MaterialPageRoute(builder: (BuildContext context) => HomePage()));
   }
 
   Future<dynamic> getData() async {

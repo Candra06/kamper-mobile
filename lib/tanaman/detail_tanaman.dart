@@ -4,6 +4,7 @@ import 'package:kamper/utils/hex_color.dart';
 import 'dart:convert';
 import 'dart:async';
 import 'package:http/http.dart' as http;
+import 'package:cached_network_image/cached_network_image.dart';
 
 import '../routes.dart';
 
@@ -45,7 +46,7 @@ class _PageDetailTanamanState extends State<PageDetailTanaman> {
       asal = data["data"][0]["asal"];
       deskripsi = data["data"][0]["deskripsi"];
       foto = data["data"][0]["foto"].toString();
-      print(Config.ipServer+foto.toString()); 
+      print(Config.ipWeb+foto.toString());
     });
   }
 
@@ -86,10 +87,10 @@ class _PageDetailTanamanState extends State<PageDetailTanaman> {
   }
 
   Widget item(index) {
-    print(listPenyakit[index]["nama"]);
     return GestureDetector(
         onTap: () {
-          Navigator.pushNamed(context, Routes.DETAIL_PENYAKIT, arguments: listPenyakit[index]['id'].toString());
+          Navigator.pushNamed(context, Routes.DETAIL_PENYAKIT,
+              arguments: listPenyakit[index]['id'].toString());
         },
         child: Card(
           child: Container(
@@ -153,10 +154,7 @@ class _PageDetailTanamanState extends State<PageDetailTanaman> {
               ),
               Expanded(
                 child: TabBarView(
-                  children: [
-                    detail(),
-                    penyakit()
-                  ],
+                  children: [detail(), penyakit()],
                 ),
               ),
             ],
@@ -182,10 +180,21 @@ class _PageDetailTanamanState extends State<PageDetailTanaman> {
             Container(
               width: MediaQuery.of(context).size.width,
               height: 200,
-              child: Image.network(
-                Config.ipServer+foto.toString(),
-                fit: BoxFit.fill,
+              child: foto == '' ? Config.newloader("Memuat Data") : CachedNetworkImage(
+                imageUrl: Config.ipServer + foto.toString(),
+                height: 110,
+                width: 110,
+                fit: BoxFit.cover,
+                placeholder: (context, url) =>
+                    Center(child: CircularProgressIndicator()),
+                progressIndicatorBuilder: (context, url, downloadProgress) =>
+                    CircularProgressIndicator(value: downloadProgress.progress),
+                errorWidget: (context, url, error) => Icon(Icons.error),
               ),
+              //  Image.network(
+              //   Config.ipServer+foto.toString(),
+              //   fit: BoxFit.fill,
+              // ),
             ),
             Container(
                 margin: EdgeInsets.only(top: 16),
