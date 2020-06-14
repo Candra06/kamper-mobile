@@ -102,7 +102,7 @@ class _SidePenyakitState extends State<SidePenyakit> {
   Widget loadItem() {
     if (loadPage) {
       return Config.newloader("Memuat Data");
-    } else if (dataPenyakit == null) {
+    } else if (dataPenyakit == null || dataPenyakit.length == 0) {
       return Config.panelkosong("Data Penyakit Kosong");
     } else {
       if (!(_searchText.isEmpty ?? true)) {
@@ -279,7 +279,7 @@ class _SidePenyakitState extends State<SidePenyakit> {
         onPressed: () {
           Navigator.pushNamed(context, Routes.ADD_PENYAKIT);
         },
-        child: Icon(Icons.add,),
+        child: Icon(Icons.add, color: Colors.white,),
         backgroundColor: Config.darkprimary,),
     );
   }

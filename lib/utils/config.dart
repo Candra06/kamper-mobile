@@ -46,6 +46,7 @@ class Config {
         textColor: Colors.white,
         fontSize: 16.0);
   }
+
   static panelkosong(pesan) {
     return Container(
       margin: EdgeInsets.all(10.0),
@@ -99,16 +100,20 @@ class Config {
         });
   }
 
+  // nama, email, id
   static getInfo() async {
     SharedPreferences preferences = await SharedPreferences.getInstance();
-    String nama = preferences.getString('name');
-    String email = preferences.getString('email');
-    String id = preferences.getString('id');
-
+    String nama = '';
+    String email = '';
+    String id = '';
+    nama = preferences.getString('name');
+     email = preferences.getString('email');
+     id = preferences.getString('id');
     String data = nama + "#" + email + "#" + id+ "#";
     return data;
   }
 
+  // token 
   static getToken() async {
     SharedPreferences preferences = await SharedPreferences.getInstance();
     String token = preferences.getString('token');

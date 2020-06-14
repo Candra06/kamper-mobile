@@ -1,4 +1,4 @@
-package com.example.kamper
+package com.dev.kamper
 
 import androidx.annotation.NonNull;
 import io.flutter.embedding.android.FlutterActivity

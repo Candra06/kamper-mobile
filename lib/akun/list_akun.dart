@@ -125,7 +125,7 @@ class _PageListAkunState extends State<PageListAkun> {
   Widget loadItem() {
     if (loadPage) {
       return Config.newloader("Memuat Data");
-    } else if (dataAkun == null) {
+    } else if (dataAkun == null || dataAkun.length == 0) {
       return Config.panelkosong("Data Akun Kosong");
     } else {
       if (!(_searchText.isEmpty ?? true)) {

@@ -15,7 +15,9 @@ class _SplashScreenState extends State<SplashScreen>
   @override
   void initState() {
     super.initState();
+    // waktu untuk menampilkan page splash screen
     Future.delayed(Duration(seconds: 3), () {
+      //navigasi ke page HomePage
       Navigator.pushReplacement(
           context, MaterialPageRoute(builder: (context) => HomePage()));
     });
@@ -41,7 +43,7 @@ class _SplashScreenState extends State<SplashScreen>
           crossAxisAlignment: CrossAxisAlignment.center,
           children: <Widget>[
             Center(
-              child: FadeTransition(
+              child: FadeTransition( // animasi fadeOut gambar dan text 
                 opacity: animationController
                     .drive(CurveTween(curve: Curves.easeOut)),
                 child: Container(

@@ -70,13 +70,14 @@ class _PageDetailTanamanState extends State<PageDetailTanaman> {
     }
   }
 
+  // method untuk mengambil data dari server
   Widget loadItem() {
-    if (loadPage) {
+    if (loadPage) { // kondisi ketika loading
       return Config.newloader("Memuat Data");
-    } else if (listPenyakit == null) {
-      return Config.panelkosong("Data Tanaman Kosong");
+    } else if (listPenyakit == null || listPenyakit.length == 0) { // validasi ketika data kosong
+      return Config.panelkosong("Data Penyakit Kosong");
     } else {
-      return Container(
+      return Container( // menampilkan data penyakit dalam bentuk list
         child: ListView.builder(
             itemCount: listPenyakit == null ? 0 : listPenyakit.length,
             itemBuilder: (BuildContext context, int i) {

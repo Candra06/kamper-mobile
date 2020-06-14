@@ -14,8 +14,10 @@ class PageLogin extends StatefulWidget {
 
 class _PageLoginState extends State<PageLogin> {
   bool _isHidden = true;
+  // name untuk form input
   TextEditingController txemail = new TextEditingController();
   TextEditingController txpassword = new TextEditingController();
+  // method untuk show/hide password
   void _toggleVisibility() {
     setState(() {
       _isHidden = !_isHidden;
@@ -142,12 +144,13 @@ class _PageLoginState extends State<PageLogin> {
     );
   }
 
+  // method untuk menampilkan loading dan request login
   showLoading(context) async {
     Config.loading(context);
     var body = new Map<String, dynamic>();
     body['email'] = txemail.text;
     body['password'] = txpassword.text;
-    print(Config.ipWeb + "login");
+    // request untuk login
     var res =
         await http.post(Uri.encodeFull(Config.ipWeb + "login"), body: body);
     print(res.body);
@@ -155,6 +158,7 @@ class _PageLoginState extends State<PageLogin> {
       var data = json.decode(res.body);
       var token = data['success']['token'].toString();
       print("tokennnya " + token);
+      // request untuk mendapatkan info detail akun
       var info = await http.post(
         Config.ipWeb + 'details',
         headers: {
@@ -173,6 +177,7 @@ class _PageLoginState extends State<PageLogin> {
           'id : ' +
           id);
       Config.alert(1, "Login Berhasil");
+      // menyimpan data detail akun ke local storage
       SharedPreferences preferences = await SharedPreferences.getInstance();
       await preferences.setString("token", token);
       await preferences.setString("name", nama);
@@ -188,6 +193,7 @@ class _PageLoginState extends State<PageLogin> {
     return true;
   }
 
+  // widget untuk form input
   Widget buildTextField(String hintText, TextEditingController txparam) {
     return Container(
       margin: EdgeInsets.only(bottom: 0),
@@ -220,9 +226,10 @@ class _PageLoginState extends State<PageLogin> {
               onPressed: () => {},
             ),
           ),
+          //icon show/hide password
           suffixIcon: hintText == " Password"
               ? IconButton(
-                  onPressed: _toggleVisibility,
+                  onPressed: _toggleVisibility, //memanggil method untuk show/hide password
                   icon: _isHidden
                       ? Icon(
                           Icons.visibility_off,
@@ -235,7 +242,7 @@ class _PageLoginState extends State<PageLogin> {
                 )
               : null,
         ),
-        obscureText: hintText == " Password" ? _isHidden : false,
+        obscureText: hintText == " Password" ? _isHidden : false, // menampilkan/menyembunyikan karakter password
       ),
     );
   }

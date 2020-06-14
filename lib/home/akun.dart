@@ -14,12 +14,14 @@ class _SideAkunState extends State<SideAkun> {
   String email = '';
   String id = '';
 
+  // method untuk logout
   logOut() async {
     SharedPreferences preferences = await SharedPreferences.getInstance();
     await preferences.setString("token", '');
     Navigator.pushReplacement(context, MaterialPageRoute(builder: (BuildContext context) => HomePage()));
   }
 
+  // method untuk mengambil detail akun dari local storage
   Future<dynamic> getData() async {
     String data = await Config.getInfo();
     List<String> hasil = data.split("#");
@@ -54,6 +56,7 @@ class _SideAkunState extends State<SideAkun> {
                     Config.darkprimary,
                     Config.primary
                   ])),
+                  //menampilkan detail profile akun
               child: Column(children: <Widget>[
                 Container(
                   margin: EdgeInsets.only(top: 16, bottom: 8),
@@ -172,7 +175,6 @@ class _SideAkunState extends State<SideAkun> {
                             color: Colors.black38,
                           ),
                           onPressed: () {
-                            // Navigator.pushNamed(context, Routes.EDIT_PASSWORD);
                           },
                         )),
                       ),
@@ -182,7 +184,6 @@ class _SideAkunState extends State<SideAkun> {
                 
                 GestureDetector(
                   onTap: () {
-                    // Navigator.pushNamed(context, Routes.TOS);
                   },
                   child: new Container(
                     width: MediaQuery.of(context).size.width,
@@ -223,7 +224,7 @@ class _SideAkunState extends State<SideAkun> {
                 ),
                 GestureDetector(
                   onTap: () {
-                    logOut();
+                    logOut(); // memanggil method logout
                   },
                   child: new Container(
                     width: MediaQuery.of(context).size.width,
@@ -255,7 +256,7 @@ class _SideAkunState extends State<SideAkun> {
                             color: Colors.black38,
                           ),
                           onPressed: () {
-                            // banned(context);
+                            logOut();
                           },
                         )),
                       ),

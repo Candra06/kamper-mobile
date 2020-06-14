@@ -1,5 +1,5 @@
-
 class GradleException {
-    GradleException(java.lang.String string) {
+    GradleException(java.lang.String s) {
+
     }
 }

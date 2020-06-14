@@ -415,6 +415,7 @@ class _PageAddTanamanState extends State<PageAddTanaman> {
     );
   }
 
+  // method untuk menyimpan data tanaman
   simpanData(context) async {
     Config.loading(context);
     var body = new Map<String, dynamic>();
@@ -424,22 +425,22 @@ class _PageAddTanamanState extends State<PageAddTanaman> {
     body['kingdom'] = txtkingdom.text;
     body['asal'] = txtasaltanaman.text;
     body['deskripsi'] = txtdeskripsi.text;
-    body['foto'] = 'data:image/png;base64,'+base64;
+    body['foto'] = 'data:image/png;base64,'+base64; // mengirim enkripsi foto berupa base64
 
     var token = await Config.getToken();
 
-    var res = await http.post(Uri.encodeFull(Config.ipWeb + "addPlants"),
+    var res = await http.post(Uri.encodeFull(Config.ipWeb + "addPlants"), // melakukan request dengan method post ke server
         body: body,
         headers: {
           'Authorization': 'Bearer $token',},);
     
-    if (res.statusCode == 200) {
+    if (res.statusCode == 200) { // kondisi jika berhasil
       Config.alert(1, "Berhasil menambahkan data");
    
       Future.delayed(Duration(seconds: 1), () {
-        Navigator.pushNamed(context, Routes.DASHBOARD, arguments: 1.toString());
+        Navigator.pushNamed(context, Routes.DASHBOARD, arguments: 1.toString()); // pindah page dengan tab ke 1
       });
-    } else {
+    } else { // kondisi jika gagal
       Config.alert(2, "Gagal menambahkan data, Silahkan periksa kembali data anda!");
       Navigator.pop(context);
     }

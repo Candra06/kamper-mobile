@@ -1,4 +1,4 @@
 class File {
-    File(def p, String p) {
+    File(def P, java.lang.String p) {
     }
 }

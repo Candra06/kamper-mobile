@@ -101,7 +101,7 @@ class _PageListTanamanState extends State<PageListTanaman> {
   Widget loadItem() {
     if (loadPage) {
       return Config.newloader("Memuat Data");
-    } else if (dataNama == null) {
+    } else if (dataNama == null || dataNama.length == 0) {
       return Config.panelkosong("Data Tanaman Kosong");
     } else {
       if (!(_searchText.isEmpty ?? true)) {

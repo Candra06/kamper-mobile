@@ -17,10 +17,10 @@ class PageEditTanaman extends StatefulWidget {
 }
 
 class _PageEditTanamanState extends State<PageEditTanaman> {
-  final _formKey = GlobalKey<FormState>();
-  String fileName = '';
+  final _formKey = GlobalKey<FormState>(); // key untuk form
+  String fileName = ''; // filename gambar tanaman
   Future<File> foto;
-  File tmpfile;
+  File tmpfile; // file temporary untuk menyimpan gambar
   String base64;
   String kode = '';
   String image = '';
@@ -29,6 +29,7 @@ class _PageEditTanamanState extends State<PageEditTanaman> {
   _PageEditTanamanState(this.kode);
   Map data;
 
+  // name untuk setiap text input
   TextEditingController txtnama = new TextEditingController();
   TextEditingController txtnamalatin = new TextEditingController();
   TextEditingController txtordo = new TextEditingController();
@@ -36,26 +37,28 @@ class _PageEditTanamanState extends State<PageEditTanaman> {
   TextEditingController txtasaltanaman = new TextEditingController();
   TextEditingController txtdeskripsi = new TextEditingController();
 
+  // method untuk menampilkan detail tanaman 
   Future<dynamic> getDetail() async {
     token = await Config.getToken();
-    print(Config.ipWeb + 'getDetailPlants/$kode');
-    http.Response res =
+    http.Response res = // melakukan request ke server
         await http.get(Config.ipWeb + 'getDetailPlants/$kode', headers: {
       'Authorization': 'Bearer $token',
     });
     data = jsonDecode(res.body);
     setState(() {
+      // mengisi text input dengan value berdasarkan id tanaman saat request ke server
       txtnama.text = data["data"][0]["nama_tanaman"];
       txtnamalatin.text = data["data"][0]["nama_latin"];
       txtordo.text = data["data"][0]["ordo"];
       txtasaltanaman.text = data["data"][0]["asal"];
       txtdeskripsi.text = data["data"][0]["deskripsi"];
       txtkingdom.text = data["data"][0]["kingdom"];
-      image = Config.ipServer + data["data"][0]["foto"];
+      image = Config.ipServer + data["data"][0]["foto"]; // inisiasi file foto dengan mengambil url ke storage server
       print('imagenya '+image);
     });
   }
 
+  // method untuk memilih gambar
   getImage(context) async {
     final imgSrc = await showDialog<ImageSource>(
         context: context,
@@ -83,6 +86,7 @@ class _PageEditTanamanState extends State<PageEditTanaman> {
     }
   }
 
+  // wdiget untuk menampilkan gambar
   Widget showImage() {
     return Container(
       child: FutureBuilder<File>(
@@ -109,7 +113,7 @@ class _PageEditTanamanState extends State<PageEditTanaman> {
                     margin: EdgeInsets.all(8),
                     width: foto.toString() == '' ? 0 : 170,
                     height: foto.toString() == '' ? 0 : 170,
-                    child: ClipRRect(
+                    child: ClipRRect( // menampilkan foto dengan url dari server
                         child: CachedNetworkImage(
                           imageUrl:
                               image.toString(),
@@ -151,7 +155,7 @@ class _PageEditTanamanState extends State<PageEditTanaman> {
             color: Config.darkprimary,
           ),
           onPressed: () {
-            Navigator.of(context).pop();
+            Navigator.of(context).pop(); // kembali ke page sebelumnya
           },
         ),
         title: new Text(
@@ -447,6 +451,7 @@ class _PageEditTanamanState extends State<PageEditTanaman> {
                             padding: EdgeInsets.only(top: 13, bottom: 13),
                             color: Colors.transparent,
                             onPressed: () {
+                              // validasi jika ada inputan yang kosong
                               if (txtnama.text == '') {
                                 Config.alert(2, "Nama tanaman tidak valid!");
                               } else if (txtnamalatin.text == '') {
@@ -462,10 +467,8 @@ class _PageEditTanamanState extends State<PageEditTanaman> {
                               } else if (foto == null) {
                                 Config.alert(2, "Foto masih kosong");
                               } else {
-                                // Scaffold.of(context).showSnackBar(success);
-                                simpanData(context);
+                                simpanData(context); // memanggil method simpan data
                               }
-                              // simpanData(context);
                             },
                             shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(5)),
@@ -486,6 +489,7 @@ class _PageEditTanamanState extends State<PageEditTanaman> {
     );
   }
 
+  // method untuk menyimpan data tanaman
   simpanData(context) async {
     Config.loading(context);
     var body = new Map<String, dynamic>();
@@ -498,7 +502,7 @@ class _PageEditTanamanState extends State<PageEditTanaman> {
     body['foto'] = 'data:image/png;base64,' + base64;
 
     var token = await Config.getToken();
-    var res = await http.post(
+    var res = await http.post( // request ke server dengan method post dan body dari form input
       Uri.encodeFull(Config.ipWeb + "updatePlants/$kode"),
       body: body,
       headers: {
@@ -506,13 +510,13 @@ class _PageEditTanamanState extends State<PageEditTanaman> {
       },
     );
 
-    if (res.statusCode == 200) {
+    if (res.statusCode == 200) { // jika request berhasil
       Config.alert(1, "Berhasil mengubah data");
 
       Future.delayed(Duration(seconds: 1), () {
         Navigator.pushNamed(context, Routes.DASHBOARD, arguments: 1.toString());
       });
-    } else {
+    } else { //jika request gagal
       Config.alert(
           2, "Gagal mengubah data, Silahkan periksa kembali data anda!");
       Navigator.pop(context);

@@ -7,12 +7,19 @@ import 'package:kamper/utils/fade_animation.dart';
 import 'package:kamper/utils/hex_color.dart';
 import 'dart:async';
 
+import 'package:shared_preferences/shared_preferences.dart';
+
 class HomePage extends StatefulWidget {
   @override
   _HomePageState createState() => _HomePageState();
 }
 
 class _HomePageState extends State<HomePage> {
+  String token = '';
+  void getData() async {
+    SharedPreferences preferences = await SharedPreferences.getInstance();
+    token = preferences.getString('token');
+  }
   Future<bool> _onWillPop() async {
     return (await showDialog(
           context: context,
@@ -32,6 +39,12 @@ class _HomePageState extends State<HomePage> {
           ),
         )) ??
         false;
+  }
+
+  @override
+  void initState() {
+    getData();
+    super.initState();
   }
 
   @override
@@ -125,11 +138,14 @@ class _HomePageState extends State<HomePage> {
                           style: BorderStyle.solid,
                           width: 1),
                       onPressed: () {
-                        if (Config.getToken() == '') {
-                          Navigator.pushNamed(context, Routes.LOGIN);
-                        } else {
-                          Navigator.pushNamed(context, Routes.DASHBOARD, arguments: 0.toString());
-                        }
+                       
+                          if (token == null) {
+                            Navigator.pushNamed(context, Routes.LOGIN);
+                            print('Login dulu');
+                          } else {
+                            Navigator.pushNamed(context, Routes.DASHBOARD, arguments: 0.toString());
+                            print('Dashboard dulu');
+                          }
                       },
                       shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(5)),

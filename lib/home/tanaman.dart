@@ -11,7 +11,7 @@ class SideTanaman extends StatefulWidget {
 }
 
 class _SideTanamanState extends State<SideTanaman> {
-  TextEditingController search = TextEditingController();
+  TextEditingController search = TextEditingController(); // name untuk text input pencarian
   bool isSearch = false;
   bool loadPage = true;
   List dataTanaman = new List();
@@ -24,11 +24,14 @@ class _SideTanamanState extends State<SideTanaman> {
     Icons.search,
     color: Config.darkprimary,
   );
+
+  //default appbar title
   Widget _appBarTitle = new Text(
     'Tanaman',
     style: TextStyle(color: Config.darkprimary),
   );
 
+  // constructor
   _SideTanamanState() {
     search.addListener(() {
       if (search.text.isEmpty) {
@@ -46,6 +49,7 @@ class _SideTanamanState extends State<SideTanaman> {
     });
   }
 
+  // ngambil data dari server
   Future getData() async {
     setState(() {
       loadPage = true;
@@ -64,7 +68,6 @@ class _SideTanamanState extends State<SideTanaman> {
         tempList.add(data['data'][i]);
       }
       setState(() {
-        print(tempList);
         nama = tempList;
         nama.shuffle();
         dataTanaman = nama;
@@ -78,22 +81,24 @@ class _SideTanamanState extends State<SideTanaman> {
     }
   }
 
+  // request untuk menghapus data
   Future deleteData(int id) async{
     token = await Config.getToken();
+    // request ke server untuk manggil method hapus data bedasarkan id tanamana(id.toString)
     http.Response response = await http.get(
       Config.ipWeb + 'deletePlants/'+id.toString(),
       headers: {
-        'Authorization': 'Bearer $token',
+        'Authorization': 'Bearer $token', // authentifikasi berdasarkan token, jika token == '' gk bisa ngirim request
       },
-    );
-    if (response.statusCode == 200) {
+    ); 
+    if (response.statusCode == 200) { // ketika request berhasil statusCode== 200
       setState(() {
-        Config.alert(1, "Berhasil menghapus data");
+        Config.alert(1, "Berhasil menghapus data"); // 
         loadPage = false;
         Navigator.pop(context);
-        getData();
+        getData(); // memanggil method getData
       });
-    } else {
+    } else { // ketika request merespon "Gagal"
       Config.alert(2, "Terjadi Kesalahan. Silahkan Coba Lagi");
       setState(() {
         loadPage = false;
@@ -101,33 +106,33 @@ class _SideTanamanState extends State<SideTanaman> {
     }
   }
 
+  // widget untuk load item
   Widget loadItem() {
     if (loadPage) {
-      return Config.newloader("Memuat Data");
-    } else if (dataTanaman == null) {
-      return Config.panelkosong("Data Tanaman Kosong");
+      return Config.newloader("Memuat Data"); // menampilkan loading
+    } else if (dataTanaman == null || dataTanaman.length == 0) {
+      return Config.panelkosong("Data Tanaman Kosong"); // menampilkan jika tanaman kosong
     } else {
-      if (!(_searchText.isEmpty ?? true)) {
+      if (!(_searchText.isEmpty ?? true)) { //jika text pencarian diisi
         List<dynamic> tempList = List();
         for (int i = 0; i < dataTanaman.length; i++) {
-          if (dataTanaman[i]['nama_tanaman'].toLowerCase().contains(_searchText.toLowerCase())) {
+          if (dataTanaman[i]['nama_tanaman'].toLowerCase().contains(_searchText.toLowerCase())) { // menampilkan data tanaman berdasarkan text input
             tempList.add(dataTanaman[i]);
-            print(tempList);
           }
         }
         dataTanaman = tempList;
       }
-      return Container(
+      return Container( // menampilkan data tanaman secara keseluruhan
         child: ListView.builder(
             itemCount: nama == null ? 0 : dataTanaman.length,
             itemBuilder: (BuildContext context, int i) {
-              return item(i);
+              return item(i); // menampilkan data tanaman secara keseluruhan dengan card view index ke i
             }),
       );
     }
   }
 
-  Widget item(index) {
+  Widget item(index) { // menampilkan data tanaman secara keseluruhan dengan card view
     return Card(
           child: Container(
               margin: EdgeInsets.all(8),
@@ -138,22 +143,22 @@ class _SideTanamanState extends State<SideTanaman> {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: <Widget>[
-                        Text(dataTanaman[index]["nama_tanaman"], style: TextStyle(fontWeight: FontWeight.bold, fontSize: 15),),
+                        Text(dataTanaman[index]["nama_tanaman"], style: TextStyle(fontWeight: FontWeight.bold, fontSize: 15),), // menampilkan nama tanaman
                         Container(
                           margin: EdgeInsets.only(top:8),
-                          child: Text(dataTanaman[index]["nama_latin"], style: TextStyle(color: Colors.black45),)),
+                          child: Text(dataTanaman[index]["nama_latin"], style: TextStyle(color: Colors.black45),)),  // menampilkan nama latin tanaman
                       ],
                     )),
                   Container(
                       child: Row(
                     children: <Widget>[
-                      IconButton(
+                      IconButton(  // icon untuk edit
                           icon: Icon(
                             Icons.edit,
                             color: Colors.black38,
                           ),
                           onPressed: () {
-                            Navigator.pushNamed(context, Routes.EDIT_TANAMAN, arguments: dataTanaman[index]['id'].toString());
+                            Navigator.pushNamed(context, Routes.EDIT_TANAMAN, arguments: dataTanaman[index]['id'].toString());  // menampilkan halaman edit dengan parameter id
                           }),
                       IconButton(
                           icon: Icon(
@@ -161,7 +166,7 @@ class _SideTanamanState extends State<SideTanaman> {
                             color: Colors.black38,
                           ),
                           onPressed: () {
-                            alertDialog(dataTanaman[index]["id"]);
+                            alertDialog(dataTanaman[index]["id"]); // menampilkan alert konfirmasi penghapusan data berdasarkan id
                           }),
                     ],
                   ))
@@ -170,10 +175,7 @@ class _SideTanamanState extends State<SideTanaman> {
         );
   }
 
-  Widget reloadPage() {
-    return Container();
-  }
-
+  // alert dialog konfirmasi hapus data
   alertDialog(int id) {
     return showDialog(
         context: context,
@@ -192,7 +194,7 @@ class _SideTanamanState extends State<SideTanaman> {
                   )),
               FlatButton(
                   onPressed: () {
-                    deleteData(id);
+                    deleteData(id); // memanggil method hapus data berdasarkan id tanaman
                   },
                   child: Text('Hapus',
                       style: TextStyle(color: Config.darkprimary)))
@@ -201,23 +203,25 @@ class _SideTanamanState extends State<SideTanaman> {
         });
   }
 
+  // pull to refresh
   Future<Null> reload() async {
     await Future.delayed(Duration(milliseconds: 1500));
     getData();
   }
 
   @override
-  void initState() {
+  void initState() { // method yang pertama kali dipanggil ketika page ditampilkan
     super.initState();
     refresh = GlobalKey<RefreshIndicatorState>();
-    getData();
+    getData(); // memanggil method get data
   }
 
+  // method ketika icon search di klik
   void _searchPressed() {
     setState(() {
-      if (this._searchIcon.icon == Icons.search) {
-        this._searchIcon = new Icon(Icons.close, color: Colors.black54,);
-        this._appBarTitle = new TextField(
+      if (this._searchIcon.icon == Icons.search) { // ketika variable _search icon == cari 
+        this._searchIcon = new Icon(Icons.close, color: Colors.black54,); // variable _searchIcon menjadi icon close untuk membatakan pencarian
+        this._appBarTitle = new TextField( // menampilkan text input pencarian
           textInputAction: TextInputAction.search,
           controller: search,
           decoration: InputDecoration(
@@ -227,7 +231,7 @@ class _SideTanamanState extends State<SideTanaman> {
               hintText: "Cari nama tanaman"),
         );
       } else {
-        
+        // menampilkan default appBar dengan judul Tanaman
         this._searchIcon = new Icon(Icons.search, color: Config.darkprimary,);
         this._appBarTitle = new Text('Tanaman', style: TextStyle(color: Config.darkprimary));
         dataTanaman = nama;
@@ -236,6 +240,7 @@ class _SideTanamanState extends State<SideTanaman> {
     });
   }
 
+  // Widget untuk menampilkan appbar
   Widget _buildBar(BuildContext context) {
     return new AppBar(
       centerTitle: false,
@@ -247,15 +252,15 @@ class _SideTanamanState extends State<SideTanaman> {
           Container(
               margin: EdgeInsets.only(right: 8),
               child: GestureDetector(
-                  onTap: () {
+                  onTap: () { //ketika icon search ditekan/diklik
                     _searchPressed();
                     setState(() {
-                      isSearch = !isSearch;
+                      isSearch = !isSearch; // isSearch menjadi true/false
                     });
                   },
-                  child: !isSearch
+                  child: !isSearch // isSearch == false maka akan menampikan icon cari
                       ? Icon(Icons.search, color: Config.darkprimary)
-                      : Icon(
+                      : Icon( // isSearch == true maka akan menampilkan icon X
                           Icons.close,
                           color: Config.darkprimary,
                         )))
@@ -266,22 +271,23 @@ class _SideTanamanState extends State<SideTanaman> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: _buildBar(context),
+      appBar: _buildBar(context), // memanggil widget AppBar
       body: Container(
         margin: EdgeInsets.all(8),
-        child: RefreshIndicator(
+        child: RefreshIndicator( // widget untuk pull refresh
             key: refresh,
             onRefresh: () async {
-              reload();
+              reload(); // memanggil method reload
             },
             child: Container(margin: EdgeInsets.all(8), child: loadItem())),
       ),
-      floatingActionButton: FloatingActionButton(
+      floatingActionButton: FloatingActionButton( // floating action button dengan icon +
         onPressed: () {
-          Navigator.pushNamed(context, Routes.ADD_TANAMAN);
+          Navigator.pushNamed(context, Routes.ADD_TANAMAN); // pindah page ke Add data tanaman
         },
         child: Icon(
           Icons.add,
+          color: Colors.white,
         ),
         backgroundColor: Config.darkprimary,
       ),

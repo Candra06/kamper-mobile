@@ -353,7 +353,6 @@ class _PageAddPeyakitState extends State<PageAddPeyakit> {
                                   txtciripenyakit.text = ciri;
                                   txtpenanggulangan.text = penanggulangan;
                                   txtpencegahan.text = pencegahan;
-                                  simpanData(context);
                                 });
                               if (txtnama.text == '') {
                                 Config.alert(2, "Nama Masih kosong!");

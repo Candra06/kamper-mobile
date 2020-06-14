@@ -41,7 +41,8 @@ class _PageHomeState extends State<PageHome> {
           plant = data['data'];
         });
       } else {
-        Config.alert(2, "Terjadi Kesalahan. Silahkan Coba Lagi");
+        
+        Config.alert(2, "Terjadi Kesalahan saat load tanaman. Silahkan Coba Lagi");
       }
   }
   Future<dynamic> countDesease() async{
@@ -51,14 +52,25 @@ class _PageHomeState extends State<PageHome> {
       headers: {
         'Authorization': 'Bearer $token',
       },);
+      print(res.statusCode);
       if (res.statusCode == 200) {
         var data = json.decode(res.body);
-        print(res.body);
+        print("Penyakit "+res.body);
+        if (data['data'] == 0 || data['data']==null) {
+          setState(() {
+            desease = 0;
+          });
+        } else {
+          setState(() {
+            desease = data['data'];
+          });
+        }
+      } else if (res.statusCode == 401) {
         setState(() {
-          desease = data['data'];
-        });
-      } else {
-        Config.alert(2, "Terjadi Kesalahan. Silahkan Coba Lagi");
+            desease = 0;
+          });
+      }else{
+        Config.alert(2, "Terjadi Kesalahan saat load penyakit. Silahkan Coba Lagi");
       }
   }
   Future<dynamic> countUser() async{
@@ -74,7 +86,7 @@ class _PageHomeState extends State<PageHome> {
           user = data['data'];
         });
       } else {
-        Config.alert(2, "Terjadi Kesalahan. Silahkan Coba Lagi");
+        Config.alert(2, "Terjadi Kesalahan saat load user. Silahkan Coba Lagi");
       }
   }
 
